@@ -29,13 +29,13 @@ function register_my_menus() {
 		)
 	);
 }
-add_action( 'init', 'cleverleakpost' );
-function cleverleakpost() {
-  register_post_type( 'cleverleakpost',
+add_action( 'init', 'post' );
+function post() {
+  register_post_type( 'post',
     array(
       'labels' => array(
-        'name' => __( 'Clever Leak Posts' ),
-        'singular_name' => __( 'Clever Leak Posts' )
+        'name' => __( ' Posts' ),
+        'singular_name' => __( ' Posts' )
       ),
        'taxonomies' => array('category'),
        'query_var' => false,
