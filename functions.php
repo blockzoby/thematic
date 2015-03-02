@@ -29,21 +29,24 @@ function register_my_menus() {
 		)
 	);
 }
-add_action( 'init', 'custom_post_type' );
-function custom_post_type() {
-  register_post_type( 'postcustomvideo',
+add_action( 'init', 'cleverleakpost' );
+function cleverleakpost() {
+  register_post_type( 'cleverleakpost',
     array(
       'labels' => array(
-        'name' => __( 'Videos' ),
-        'singular_name' => __( 'Videos' )
+        'name' => __( 'Clever Leak Posts' ),
+        'singular_name' => __( 'Clever Leak Posts' )
       ),
        'taxonomies' => array('category'),
+       'query_var' => false,
       'public' => true,
       'has_archive' => true,
-      'supports' => array( 'title', 'editor', 'thumbnail','custom-fields')
+      'supports' => array( 'title', 'editor', 'excerpt','thumbnail','custom-fields')
     )
   );
+  flush_rewrite_rules( false );
 }
+
 
 function pu_theme_menu()
 {
@@ -143,6 +146,7 @@ function pu_validate_settings($input)
   {
     $newinput[$k] = trim($v);
     
+    // Check the input is a letter or a number
     if(!preg_match('/^[A-Z0-9 _]*$/i', $v)) {
       $newinput[$k] = '';
     }
@@ -153,16 +157,65 @@ function pu_validate_settings($input)
 
 
 function myplugin_settings() {  
-
+// Add tag metabox to page
 register_taxonomy_for_object_type('post_tag', 'page'); 
-
+// Add category metabox to page
 register_taxonomy_for_object_type('category', 'page');  
 }
-
+ // Add to the admin_init hook of your theme functions.php file 
 add_action( 'admin_init', 'myplugin_settings' );
 
 function foobar_func( $atts ){
 	return "foo and bar";
 }
 add_shortcode( 'foobar', 'foobar_func' );
+
+function navigation(){
+$defaults = array(
+  'theme_location'  => '',
+  'menu'            => '',
+  'container'       => 'div',
+  'container_class' => '',
+  'container_id'    => '',
+  'menu_class'      => 'menu',
+  'menu_id'         => '',
+  'echo'            => true,
+  'fallback_cb'     => 'wp_page_menu',
+  'before'          => '',
+  'after'           => '',
+  'link_before'     => '',
+  'link_after'      => '',
+  'items_wrap'      => '<ul id="%1$s" class="%2$s">%3$s</ul>',
+  'depth'           => 0,
+  'walker'          => ''
+);
+ 
+ return wp_nav_menu( $defaults );
+}
+
+function ShortTitle($text)
+
+{
+
+$chars_limit = 30;
+
+$chars_text = strlen($text);
+
+$text = $text." ";
+
+$text = substr($text,0,$chars_limit);
+
+$text = substr($text,0,strrpos($text,' '));
+
+if ($chars_text > $chars_limit)
+
+{
+
+$text = $text."...";
+
+}
+
+return $text;
+
+}
 ?>
